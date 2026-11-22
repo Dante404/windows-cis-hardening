@@ -285,10 +285,6 @@ function Show-Assessment($assessment, [ValidateSet('Assess', 'Plan', 'Verify')][
 }
 
 function Invoke-Preview {
-    # Scope this preference to the read-only preview. This avoids -WhatIf
-    # affecting auto-imported PowerShell modules and ForEach-Object -MemberName.
-    # This function contains no file writes or policy modifications, and Apply
-    # -WhatIf returns from the script before its mutating branch is reached.
     $WhatIfPreference = $false
     if ($Mode -eq 'Apply') {
         Assert-Administrator
@@ -348,8 +344,6 @@ function Get-RestoreEntry($control, $state) {
 }
 
 function Invoke-Checked($exe, [string[]]$arguments, [string]$outputFile = '') {
-    # Some versions of Windows PowerShell ISE report native stderr as errors
-    # even when LGPO.exe returns exit code 0. Use the process exit code.
     $ErrorActionPreference = 'Continue'
     $output = @(& $exe @arguments 2>&1 | ForEach-Object { [string]$_ })
     $exitCode = $LASTEXITCODE
@@ -362,9 +356,6 @@ function Invoke-Checked($exe, [string[]]$arguments, [string]$outputFile = '') {
     Write-Host ('Completed: {0} {1}' -f (Split-Path -Path $exe -Leaf), $arguments[0])
 }
 
-# A real -Mode Plan is a read-only preview. Apply -WhatIf is handled here,
-# before any modification, so internal PowerShell cmdlets do not emit noisy
-# inherited WhatIf messages or suppress planned control IDs.
 $explicitWhatIf = ($PSBoundParameters.ContainsKey('WhatIf') -and [bool]$PSBoundParameters['WhatIf'])
 if ($Mode -eq 'Plan' -or ($Mode -eq 'Apply' -and $explicitWhatIf)) {
     Invoke-Preview
@@ -383,9 +374,6 @@ if ($Mode -eq 'Assess' -or $Mode -eq 'Verify') {
     return
 }
 
-# A syntax-only LGPO test. The same embedded control catalogue and text
-# serializer used by Apply generate the input for LGPO.exe /r. Unlike /t,
-# /r and /parse only create/read files and do not import local policy.
 if ($Mode -eq 'TestLGPO') {
     if (-not (Test-Path -LiteralPath $LgpoPath -PathType Leaf)) {
         throw ('Microsoft LGPO.exe not found: ' + $LgpoPath)
