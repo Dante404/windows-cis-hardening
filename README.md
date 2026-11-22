@@ -6,8 +6,6 @@ A lab-tested example of **controlled CIS Benchmark implementation** on a standal
 
 ## Approach
 
-CIS hardening is not one-size-fits-all. Identify the system's purpose, existing controls, management authority, network connectivity, and application dependencies before selecting settings. Applying an entire policy template may be quick, but doing so without compatibility testing can disrupt services and applications. This example demonstrates a sequential approach:
-
 **Assess -> Plan -> Validate LGPO -> Backup and Apply -> Verify -> Functional test -> Rollback (if necessary)**
 
 ## Repository contents
@@ -122,7 +120,7 @@ Compare the result with the initial assessment.
 
 ## Lab validation
 
-The workflow was tested in a standalone Windows 11 VirtualBox VM with LGPO **3.0.2004.13001** on **November 22, 2026**:
+The workflow was tested in a standalone Windows 11 VirtualBox VM:
 
 | Stage | Effective CIS targets met | Explicit local policy targets met |
 | --- | ---: | ---: |
@@ -131,5 +129,3 @@ The workflow was tested in a standalone Windows 11 VirtualBox VM with LGPO **3.0
 | After Rollback | 3/7 | 0/7 |
 
 All seven scoped original policy entries were reported restored, and the final reassessment matched the initial configuration. See the [validation summary and original console screenshots](evidence/Validation-Summary.md).
-
-**Limitations:** These are lab results for one Windows 11 installation, not CIS certification or proof of compatibility with another customer's devices, drivers, applications, or management environment.
