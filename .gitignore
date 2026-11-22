@@ -1,0 +1,19 @@
+# Microsoft utility is downloaded separately.
+LGPO.exe
+
+# Locally generated policy, backup, and validation artifacts.
+*.pol
+*.lgpo.txt
+Run.json
+Before.csv
+After.csv
+After-Rollback.csv
+Rollback-Verification.csv
+LGPO-Backup/
+LGPO-Validation-*/
+CIS-Section9.3-Demo/
+PreTest-LGPO*/
+
+# Local workspace data.
+.DS_Store
+Thumbs.db
